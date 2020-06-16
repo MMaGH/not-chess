@@ -11,8 +11,8 @@
     {% for row in map %}
         <div class="row">
             {% for cell in row %}
-                {% if cell|length == 1 %}
-                    <div class="cell {{ cell }}"></div>
+                {% if cell|length != 2 %}
+                    <div class="cell {{ symbols[cell] }}"></div>
                 {% else %}
                     <div class="cell player" data-player="{{ cell[0] }}" data-direction="{{ cell[1] }}"></div>
                 {% endif %}
