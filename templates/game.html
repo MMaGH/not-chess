@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{{ url_for("static", filename="style/game.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="style/game.css") }}">
     <script src="{{ url_for("static", filename="js/main.js") }}" type="module" defer></script>
 </head>
 <body>
@@ -11,10 +11,13 @@
     {% for row in map %}
         <div class="row">
             {% for cell in row %}
+                {% set row_index = loop.index %}
                 {% if cell|length != 2 %}
                     <div class="cell {{ symbols[cell] }}"></div>
                 {% else %}
-                    <div class="cell player" data-player="{{ cell[0] }}" data-direction="{{ cell[1] }}"></div>
+                    <div class="cell player">
+                        <div data-player="{{ cell[0] }}" data-direction="{{ cell[1] }}" data-row="{{ row_index }}" data-col="{{ loop.index }}"></div>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
