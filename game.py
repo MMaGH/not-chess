@@ -16,3 +16,8 @@ map = [
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
 ]
 
+symbols = {
+    'X': 'wall',
+    'E': 'empty',
+    'B': 'box',
+}
