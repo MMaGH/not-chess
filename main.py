@@ -8,7 +8,8 @@ app.secret_key = '$2b$12$5MbzcQaISUKBu4MqGbZ25.G1pViRBZ5vwV.nTtF8LYXpMuYZ3BwUm'
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    map = game.map
+    return render_template("game.html", map=map)
 
 
 if __name__ == '__main__':
