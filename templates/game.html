@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename="style/game.css") }}">
+    <script src="{{ url_for("static", filename="js/main.js") }}" type="module" defer></script>
 </head>
 <body>
+<div class="map">
+    {% for row in map %}
+        <div class="row">
+            {% for cell in row %}
+                {% if cell|length == 1 %}
+                    <div class="cell {{ cell }}"></div>
+                {% else %}
+                    <div class="cell player" data-player="{{ cell[0] }}" data-direction="{{ cell[1] }}"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
 
 </body>
 </html>
