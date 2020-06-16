@@ -8,18 +8,23 @@ app.secret_key = '$2b$12$5MbzcQaISUKBu4MqGbZ25.G1pViRBZ5vwV.nTtF8LYXpMuYZ3BwUm'
 
 @app.route('/')
 def index():
-    map = game.my_map
+    map = game.original_map
     symbols = game.symbols
     return render_template("game.html", map=map, symbols=symbols)
 
 
-@app.route('/player-move', methods=['GET', 'POST'])
+@app.route('/player-move', methods=['POST'])
 @json_response
 def player_move():
-    if request.method == 'POST':
-        my_dict = request.json
-        map = game.step_player(my_dict['state'], my_dict['next'])
-        return map
+    my_dict = request.json
+    map = game.step_player(my_dict['state'], my_dict['next'])
+    return map
+
+
+@app.route('/map')
+@json_response
+def map():
+    return game.my_map
 
 
 if __name__ == '__main__':

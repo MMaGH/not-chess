@@ -34,8 +34,17 @@
     background-size: cover;
 }
 
-.empty, .player {
+.empty {
     background: url("/static/assets/floor.png") no-repeat;
+    opacity: 0.7;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    background-size: cover;
+}
+
+.player{
+    background: white;
     opacity: 0.7;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;

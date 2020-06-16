@@ -8,20 +8,7 @@
 </head>
 <body>
 <div class="map">
-    {% for row in map %}
-        <div class="row">
-            {% for cell in row %}
-                {% set row_index = loop.index %}
-                {% if cell|length != 2 %}
-                    <div class="cell {{ symbols[cell] }}"></div>
-                {% else %}
-                    <div class="cell player">
-                        <div data-player="{{ cell[0] }}" data-direction="{{ cell[1] }}" data-row="{{ row_index }}" data-col="{{ loop.index }}"></div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endfor %}
+
 </div>
 
 </body>
