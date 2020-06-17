@@ -1,4 +1,8 @@
 .map {
+    position: fixed;
+    top:0;
+    left: 50%;
+    transform: translate(-50%);
     padding: 0px;
     margin: 0px;
 }
@@ -6,19 +10,20 @@
 .row {
     padding: 0px;
     margin: 0px;
-    height: 50px;
-    width: 750px;
+    height: 65px;
+    width: 975px;
 }
 
 .cell {
+    position: relative;
     padding: 0px;
-    width: 50px;
-    height: 50px;
+    width: 65px;
+    height: 65px;
     display: inline-block;
     float: left;
 }
 
-.wall{
+.wall {
     background: url("/static/assets/wall.png") no-repeat;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -36,6 +41,14 @@
 
 .empty {
     background: url("/static/assets/floor.png") no-repeat;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    background-size: cover;
+}
+
+.count_upgrade {
+    background: url("/static/assets/upgrade_frame.png") no-repeat;
     opacity: 0.7;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -43,11 +56,25 @@
     background-size: cover;
 }
 
-.player{
-    background: white;
+.size_upgrade {
+    background: url("/static/assets/upgrade_frame.png") no-repeat;
     opacity: 0.7;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     background-size: cover;
+}
+  
+.player {
+    position: absolute;
+    padding: 0px;
+    width: 85px;
+    height: 85px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    float: left;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    background-size: auto;
 }

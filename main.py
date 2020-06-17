@@ -5,6 +5,7 @@ import game
 app = Flask(__name__)
 app.secret_key = '$2b$12$5MbzcQaISUKBu4MqGbZ25.G1pViRBZ5vwV.nTtF8LYXpMuYZ3BwUm'
 current_user = []
+characters_stat = []
 rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': '', '4': ''},
          {'id': '2', 'name': 'test2', 'password': 'test2', '1': '', '2': '', '3': '', '4': ''}]
 
@@ -15,8 +16,7 @@ def index():
         return redirect("/create-nickname")
     map = game.original_map
     symbols = game.symbols
-    return render_template("game.html", map=map, symbols=symbols)
-
+    return render_template("game.html", map=map, symbols=symbols, user_id=session['user_id'])
 
 @app.route('/create-nickname', methods=["GET", "POST"])
 def create_user():
@@ -24,7 +24,6 @@ def create_user():
         nickname = request.form["nickname"]
         if nickname != "" and nickname[0] != " " and nickname not in current_user:
             session["nickname"] = nickname
-            current_user.append(nickname)
             return redirect("/list-rooms")
         else:
             return render_template("create-nickname.html", message="Nickname is taken or invalid!")
@@ -79,6 +78,9 @@ def room(id):
         if password == selected_room["password"]:
             if put_player_into_room(selected_room, session["nickname"]):
                 session["room_id"] = id
+                current_user.append(session["nickname"])
+                characters_stat.append(
+                    game.create_character(session["nickname"], session["user_id"]))
                 return redirect(f"/room/{id}")
         else:
             return render_template("join_room.html", room=selected_room, message="Password is incorrect")
@@ -99,12 +101,12 @@ def logout():
         session.pop("nickname")
     return redirect("/list-rooms")
 
- 
+
 @app.route('/player-move', methods=['POST'])
 @json_response
 def player_move():
     my_dict = request.json
-    map = game.step_player(my_dict['state'], my_dict['next'])
+    map = game.step_player(my_dict['state'], my_dict['next'], characters_stat, session["nickname"])
     return map
 
 
@@ -112,12 +114,13 @@ def player_move():
 @json_response
 def map():
     return game.my_map
-  
+
 
 def put_player_into_room(room, player):
     for num in range(4):
         if room[f"{num + 1}"] == "":
             room[f"{num + 1}"] = player
+            session["user_id"] = num + 1
             for selected_room in rooms:
                 if selected_room["id"] == room["id"]:
                     selected_room = room
