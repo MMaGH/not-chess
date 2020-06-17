@@ -1,3 +1,38 @@
 .error-message {
     color: red;
 }
+
+.room-row{
+    border: 1px black solid;
+}
+
+.header {
+    border: 1px black solid;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    text-align: center;
+}
+
+.header-elem {
+    display: inline-block;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    border: saddlebrown 2px solid;
+    border-radius: 20px;
+    text-align: center;
+    background: burlywood;
+}
+
+a:link {
+    color: black;
+}
+
+a:visited {
+    color:black;
+}
+
+a:hover {
+    color: dimgrey;
+}

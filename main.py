@@ -18,7 +18,6 @@ def index():
     return render_template("game.html", map=map, symbols=symbols)
 
 
-
 @app.route('/create-nickname', methods=["GET", "POST"])
 def create_user():
     if request.method == "POST":
@@ -32,10 +31,25 @@ def create_user():
     return render_template("create-nickname.html")
 
 
-@app.route("/create-room")
+@app.route("/create-room", methods=["GET", "POST"])
 def create_room():
     if "nickname" not in session:
         return redirect("/create-nickname")
+    if "room_id" in session:
+        remove_player_from_room(session["nickname"], session["room_id"])
+    if request.method == "POST":
+        data = request.form
+        password = data["password"]
+        name = data["name"]
+        if name != "" and name[0] != " " and \
+                password != "" and password[0] != " " and \
+                check_room_name_availability(name):
+            next_id = str(int(rooms[-1]["id"]) + 1)
+            new_room = {'id': next_id, 'name': name, 'password': password, '1': '', '2': '', '3': '', '4': ''}
+            rooms.append(new_room)
+            return redirect(f"/room/{next_id}")
+        else:
+            return render_template("create-room.html", message="Invalid name or password")
     return render_template("create-room.html")
 
 
@@ -66,6 +80,8 @@ def room(id):
             if put_player_into_room(selected_room, session["nickname"]):
                 session["room_id"] = id
                 return redirect(f"/room/{id}")
+        else:
+            return render_template("join_room.html", room=selected_room, message="Password is incorrect")
     if "room_id" not in session or session["room_id"] != id:
         return render_template("join_room.html", room=selected_room)
     return render_template("room.html", room=selected_room)
@@ -119,8 +135,11 @@ def remove_player_from_room(player, room_id):
                     break
 
 
-
-
+def check_room_name_availability(name):
+    for room in rooms:
+        if room["name"] == name:
+            return False
+    return True
 
 
 if __name__ == '__main__':
