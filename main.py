@@ -13,9 +13,10 @@ rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': 
 def index():
     if "nickname" not in session:
         return redirect("/create-nickname")
-    map = game.map
+    map = game.original_map
     symbols = game.symbols
     return render_template("game.html", map=map, symbols=symbols)
+
 
 
 @app.route('/create-nickname', methods=["GET", "POST"])
@@ -82,6 +83,20 @@ def logout():
         session.pop("nickname")
     return redirect("/list-rooms")
 
+ 
+@app.route('/player-move', methods=['POST'])
+@json_response
+def player_move():
+    my_dict = request.json
+    map = game.step_player(my_dict['state'], my_dict['next'])
+    return map
+
+
+@app.route('/map')
+@json_response
+def map():
+    return game.my_map
+  
 
 def put_player_into_room(room, player):
     for num in range(4):
@@ -102,6 +117,7 @@ def remove_player_from_room(player, room_id):
                 if room[f"{num + 1}"] == player:
                     room[f"{num + 1}"] = ""
                     break
+
 
 
 
