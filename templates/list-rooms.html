@@ -4,7 +4,7 @@
     <table class="room-list">
     {% for room in rooms %}
         <tr>
-            <td>{{ room.name }}</td>
+            <td><a href="/room/{{ room.id }}">{{ room.name }}</a></td>
         </tr>
     {% endfor %}
     </table>
