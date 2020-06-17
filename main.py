@@ -96,7 +96,7 @@ def player_move():
 @json_response
 def place_bomb():
     my_dict = request.json
-    game.show_bomb(my_dict['bombState'], my_dict['userId'])
+    game.show_bomb(my_dict['bombState'], my_dict['userId'], characters_stat, session["nickname"])
     return True
 
 
