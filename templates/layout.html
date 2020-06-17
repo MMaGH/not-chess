@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Not Chess | {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for("static", filename="style/style.css") }}">
     <script src="{{ url_for("static", filename="js/main.js") }}" type="module" defer></script>
 </head>
 <body>
+<section class="header">
+    <section class="header_elem"><a href="/list-rooms">Rooms</a></section>
+    <section class="header_elem"><a href="/logout">Log Out</a></section>
+</section>
 {% block main %}
 
 {% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block title %}{{ room.name }}{% endblock %}
+{% block main %}
+    <h1>{{ room.title }}</h1>
+    <table>
+        <tr>
+            <td>Player 1</td>
+            <td>{{ room['1'] }}</td>
+        </tr>
+        <tr>
+            <td>Player 2</td>
+            <td>{{ room["2"] }}</td>
+        </tr>
+        <tr>
+            <td>Player 3</td>
+            <td>{{ room["3"] }}</td>
+        </tr>
+        <tr>
+            <td>Player 4</td>
+            <td>{{ room["4"] }}</td>
+    </tr>
+    </table>
+{% endblock %}

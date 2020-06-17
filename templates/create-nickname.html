@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block title %}Nickname{% endblock %}
+{% block main %}
+    <form method="post" action="/create-nickname">
+        <p class="error-message">{{ message }}</p>
+        <label for="nickname">Your nickname</label><br>
+        <input id="nickname" name="nickname"><br>
+        <button type="submit">Go!</button>
+    </form>
+{% endblock %}

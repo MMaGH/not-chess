@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block title %}Room list{% endblock %}
+{% block main %}
+    <table class="room-list">
+    {% for room in rooms %}
+        <tr>
+            <td><a href="/room/{{ room.id }}">{{ room.name }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
