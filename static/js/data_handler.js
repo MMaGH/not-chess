@@ -12,7 +12,8 @@ export const playerMove = async (state, next) => {
 }
 
 export const refreshMap = async (callback) => {
-    setInterval(() => getMap(callback), 2000);
+    getMap(callback);
+    setInterval(() => getMap(callback), 500);
 }
 
 function getMap(callback){

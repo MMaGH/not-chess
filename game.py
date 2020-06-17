@@ -42,7 +42,6 @@ symbols = {
 
 
 def step_player(player_state, player_next):
-    print(player_state)
     if my_map[player_next[0]][player_next[1]] == 'E':
         my_map[player_next[0]][player_next[1]] = '1' + player_next[2]
         my_map[player_state[0]][player_state[1]] = 'E'
