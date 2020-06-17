@@ -23,7 +23,7 @@
     float: left;
 }
 
-.wall{
+.wall {
     background: url("/static/assets/wall.png") no-repeat;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -47,6 +47,24 @@
     background-size: cover;
 }
 
+.count_upgrade {
+    background: url("/static/assets/upgrade_frame.png") no-repeat;
+    opacity: 0.7;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    background-size: cover;
+}
+
+.size_upgrade {
+    background: url("/static/assets/upgrade_frame.png") no-repeat;
+    opacity: 0.7;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    background-size: cover;
+}
+  
 .player {
     position: absolute;
     padding: 0px;

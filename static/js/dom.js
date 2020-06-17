@@ -2,8 +2,8 @@ import {playerMove, refreshMap} from "./data_handler.js";
 
 
 export function dom() {
-    document.addEventListener('keydown', playerMovement);
-    refreshMap(showMap);
+  document.addEventListener('keydown', playerMovement);
+  refreshMap(showMap);
 }
 
 function playerMovement(e) {
@@ -29,7 +29,7 @@ function playerMovement(e) {
                 break;
         }
         playerMove(playerState, playerNext);
-    }
+  }
 }
 
 function showMap(data) {
@@ -46,10 +46,10 @@ function showMap(data) {
                 divRow += `<div class="cell empty">
                                <div class="player" data-playernumber="${cell[0]}" data-direction="${cell[1]}" data-row="${row_index}" data-col="${col_index}"></div>
                            </div>`;
-            }
-            col_index++;
-        }
-        map.insertAdjacentHTML('beforeend',`<div class="row">
+      }
+      col_index++;
+    }
+    map.insertAdjacentHTML('beforeend', `<div class="row">
                                                             ${divRow}
                                                         </div>`)
         row_index++;
@@ -67,9 +67,11 @@ function showCharacters(){
 
 
 let symbols = {
-    'X': 'wall',
-    'E': 'empty',
-    'B': 'box',
+  'X': 'wall',
+  'E': 'empty',
+  'B': 'box',
+  'C': 'count_upgrade',
+  'S': 'size_upgrade',
 }
 
 let directions = ['up', 'left', 'down', 'right'];
