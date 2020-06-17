@@ -7,7 +7,10 @@ export function dom() {
 }
 
 function playerMovement(e) {
-    let playerNode = document.querySelector('[data-playernumber="1"]');
+    let map = document.querySelector(".map");
+    let userId = map.dataset.playernum;
+    console.log(userId)
+    let playerNode = document.querySelector(`[data-playernumber="${userId}"]`);
     let playerRowIndex = parseInt(playerNode.dataset.row);
     let playerColIndex = parseInt(playerNode.dataset.col);
     let playerState = [playerRowIndex, playerColIndex];
