@@ -43,14 +43,24 @@ symbols = {
 }
 
 
-def step_player(player_state, player_next, character_list, character_name):
+def step_player(player_state, player_next, bomb, character_list, character_name):
     tile = my_map[player_next[0]][player_next[1]]
     valid_slots = ['E', 'C', 'S']
     current_character = get_current_player(character_list, character_name)
     if tile in valid_slots:
         update_character(character_list, character_name, tile)
-        my_map[player_next[0]][player_next[1]] = current_character['user_id'] + player_next[2]
-        my_map[player_state[0]][player_state[1]] = 'E'
+        if bomb:
+            my_map[player_next[0]][player_next[1]] = current_character['user_id'] + player_next[2]
+            my_map[player_state[0]][player_state[1]] = 'E,0' + current_character['user_id']
+        else:
+            my_map[player_next[0]][player_next[1]] = current_character['user_id'] + player_next[2]
+            my_map[player_state[0]][player_state[1]] = 'E'
+
+
+def show_bomb(state, user_id):
+    if '0' not in my_map[state[0]][state[1]]:
+        my_map[state[0]][state[1]] += ',0' + user_id
+    print(my_map)
 
 
 def create_character(nickname, user_id):  # id még kell dolgozni, hogy az is autogeenrált legyen 1-4 között

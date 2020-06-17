@@ -90,8 +90,18 @@ def logout():
 @json_response
 def player_move():
     my_dict = request.json
-    map = game.step_player(my_dict['state'], my_dict['next'], characters_stat, session["nickname"])
+    map = game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
     return map
+
+
+@app.route('/player-place-bomb', methods=['POST'])
+@json_response
+def place_bomb():
+    my_dict = request.json
+    map = game.show_bomb(my_dict['bombState'], my_dict['userId'])
+    return map
+
+
 
 
 @app.route('/map')
