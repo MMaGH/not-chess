@@ -50,7 +50,7 @@
 
 
 .count_upgrade {
-    background: url("/static/assets/upgrade_frame.png") no-repeat;
+    background: url("/static/assets/bomb.png") no-repeat;
     opacity: 0.7;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -61,7 +61,7 @@
 }
 
 .size_upgrade {
-    background: url("/static/assets/upgrade_frame.png") no-repeat;
+    background: url("/static/assets/boom.png") no-repeat;
     opacity: 0.7;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -98,4 +98,15 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     background-size: auto;
+}
+
+
+.fire {
+    padding: 0px;
+    width: 65px;
+    height: 65px;
+    float: left;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
