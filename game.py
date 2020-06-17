@@ -54,7 +54,7 @@ def step_player(player_state, player_next, character_list, character_name):
 
 
 def create_character(nickname, user_id):  # id még kell dolgozni, hogy az is autogeenrált legyen 1-4 között
-    new_character = {'name': nickname, 'user_id': user_id, 'bomb_count': 1, 'bomb_size': 2, 'life': 1}
+    new_character = {'name': nickname, 'user_id': str(user_id), 'bomb_count': 1, 'bomb_size': 2, 'life': 1}
     return new_character
 
 

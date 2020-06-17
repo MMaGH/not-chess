@@ -16,7 +16,7 @@ def index():
         return redirect("/create-nickname")
     map = game.original_map
     symbols = game.symbols
-    return render_template("game.html", map=map, symbols=symbols)
+    return render_template("game.html", map=map, symbols=symbols, user_id=session['user_id'])
 
 
 @app.route('/create-nickname', methods=["GET", "POST"])
@@ -66,7 +66,7 @@ def room(id):
                 session["room_id"] = id
                 current_user.append(session["nickname"])
                 characters_stat.append(
-                    game.create_character(session["nickname"], '1'))  # ide kéne megadni az id-t 1-4 között
+                    game.create_character(session["nickname"], session["user_id"]))
                 return redirect(f"/room/{id}")
     if "room_id" not in session or session["room_id"] != id:
         return render_template("join_room.html", room=selected_room)
@@ -104,6 +104,7 @@ def put_player_into_room(room, player):
     for num in range(4):
         if room[f"{num + 1}"] == "":
             room[f"{num + 1}"] = player
+            session["user_id"] = num + 1
             for selected_room in rooms:
                 if selected_room["id"] == room["id"]:
                     selected_room = room
