@@ -6,8 +6,8 @@ app = Flask(__name__)
 app.secret_key = '$2b$12$5MbzcQaISUKBu4MqGbZ25.G1pViRBZ5vwV.nTtF8LYXpMuYZ3BwUm'
 current_user = []
 characters_stat = []
-rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': '', '4': ''},
-         {'id': '2', 'name': 'test2', 'password': 'test2', '1': '', '2': '', '3': '', '4': ''}]
+rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"},
+         {'id': '2', 'name': 'test2', 'password': 'test2', '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"}]
 
 
 @app.route('/')
@@ -17,6 +17,7 @@ def index():
     map = game.original_map
     symbols = game.symbols
     return render_template("game.html", map=map, symbols=symbols, user_id=session['user_id'])
+
 
 @app.route('/create-nickname', methods=["GET", "POST"])
 def create_user():
@@ -44,7 +45,7 @@ def create_room():
                 password != "" and password[0] != " " and \
                 check_room_name_availability(name):
             next_id = str(int(rooms[-1]["id"]) + 1)
-            new_room = {'id': next_id, 'name': name, 'password': password, '1': '', '2': '', '3': '', '4': ''}
+            new_room = {'id': next_id, 'name': name, 'password': password, '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"}
             rooms.append(new_room)
             return redirect(f"/room/{next_id}")
         else:
@@ -115,6 +116,23 @@ def player_move():
 def map():
     return game.my_map
 
+@app.route("/room/<id>/info")
+@json_response
+def room_info(id):
+    current_room = {}
+    for room in rooms:
+        if room["id"] == id:
+            current_room = room
+            break
+    return current_room
+
+@app.route("/room/<id>/start")
+def room_start(id):
+    for room in rooms:
+        if room["id"] == id:
+            room["game_state"] = "playing"
+            return redirect(f"/")
+
 
 def put_player_into_room(room, player):
     for num in range(4):
@@ -126,6 +144,8 @@ def put_player_into_room(room, player):
                     selected_room = room
                     return True
     return False
+
+
 
 
 def remove_player_from_room(player, room_id):
