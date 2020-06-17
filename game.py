@@ -75,7 +75,13 @@ def bomb_animation(state, user_id, current_character):
     explosion_placement(0, -1, current_character, state, user_id, 'L')
     explosion_placement(1, 0, current_character, state, user_id, 'D')
     explosion_placement(-1, 0, current_character, state, user_id, 'U')
-    print(my_map)
+    time.sleep(1)
+    current_character['bomb_used'] -= 1
+    my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',M' + str(user_id)), '')
+    remove_explosion_placement(0, 1, current_character, state, user_id, 'R')
+    remove_explosion_placement(0, -1, current_character, state, user_id, 'L')
+    remove_explosion_placement(1, 0, current_character, state, user_id, 'D')
+    remove_explosion_placement(-1, 0, current_character, state, user_id, 'U')
 
 
 def explosion_placement(i, j, current_character, state, user_id, direction):
@@ -84,7 +90,11 @@ def explosion_placement(i, j, current_character, state, user_id, direction):
         if 'X' not in target:
             my_map[state[0] + i][state[1] + j] += ',' + direction + user_id
             if 'B' in target:
-                put_upgrades_to_map(target)
+                number = random.randint(1, 4)
+                if number == 1:
+                    my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace('B', random.choice(['C', 'S']))
+                else:
+                    my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace('B', 'E')
                 break
         else:
             break
@@ -98,10 +108,17 @@ def explosion_placement(i, j, current_character, state, user_id, direction):
             j += 1
 
 
-def put_upgrades_to_map(target):
-    number = random.randint(1, 4)
-    if number == 1:
-        target.replace('B', random.choice(['C', 'S']))
+def remove_explosion_placement(i, j, current_character, state, user_id, direction):
+    while current_character['bomb_size'] >= i >= -1 * current_character['bomb_size'] and current_character['bomb_size'] >= j >= -1 * current_character['bomb_size']:
+        my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace((',' + direction + str(user_id)), '')
+        if i < 0:
+            i -= 1
+        elif 0 < i:
+            i += 1
+        if j < 0:
+            j -= 1
+        elif 0 < j:
+            j += 1
 
 
 def create_character(nickname, user_id):
