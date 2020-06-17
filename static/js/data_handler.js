@@ -12,7 +12,7 @@ export const playerMove = async (state, next, bomb) => {
 }
 
 export const getBomb = async (state, userId) => {
-    let dict = {'bombState': state, userId: userId};
+    let dict = {'bombState': state, 'userId': userId};
     const options = {
         method: 'POST',
         body: JSON.stringify(dict),

@@ -14,9 +14,7 @@ rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': 
 def index():
     if "nickname" not in session:
         return redirect("/create-nickname")
-    map = game.original_map
-    symbols = game.symbols
-    return render_template("game.html", map=map, symbols=symbols, user_id=session['user_id'])
+    return render_template("game.html", user_id=session['user_id'])
 
 
 @app.route('/create-nickname', methods=["GET", "POST"])
@@ -90,18 +88,16 @@ def logout():
 @json_response
 def player_move():
     my_dict = request.json
-    map = game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
-    return map
+    game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
+    return True
 
 
 @app.route('/player-place-bomb', methods=['POST'])
 @json_response
 def place_bomb():
     my_dict = request.json
-    map = game.show_bomb(my_dict['bombState'], my_dict['userId'])
-    return map
-
-
+    game.show_bomb(my_dict['bombState'], my_dict['userId'])
+    return True
 
 
 @app.route('/map')

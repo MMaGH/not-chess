@@ -59,11 +59,10 @@ def step_player(player_state, player_next, bomb, character_list, character_name)
 
 def show_bomb(state, user_id):
     if '0' not in my_map[state[0]][state[1]]:
-        my_map[state[0]][state[1]] += ',0' + user_id
-    print(my_map)
+        my_map[state[0]][state[1]] += ',0' + str(user_id)
 
 
-def create_character(nickname, user_id):  # id még kell dolgozni, hogy az is autogeenrált legyen 1-4 között
+def create_character(nickname, user_id):
     new_character = {'name': nickname, 'user_id': str(user_id), 'bomb_count': 1, 'bomb_size': 2, 'life': 1}
     return new_character
 

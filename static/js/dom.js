@@ -5,7 +5,7 @@ export function dom() {
     document.addEventListener('keydown', (e) => {
         let map = document.querySelector(".map");
         let userId = map.dataset.playernum;
-        let playerNode = document.querySelector(`[data-playernumber="${userId}"]`);
+        let playerNode = document.querySelector(`.player[data-playernumber="${userId}"]`);
         let playerRowIndex = parseInt(playerNode.dataset.row);
         let playerColIndex = parseInt(playerNode.dataset.col);
         let playerState = [playerRowIndex, playerColIndex];
@@ -65,16 +65,14 @@ function showMap(data) {
                 if (char in symbols) {
                     divRow += `<div class="${symbols[char]}"></div>`;
                 }
-                else if (!isNaN(char) && char[0] != '0') {
+                else if (!isNaN(char) && char[0] !== '0') {
                     divRow += `<div class="player" data-playernumber="${char[0]}" data-direction="${char[1]}" data-row="${row_index}" data-col="${col_index}"></div>`;
                 }
-                else if ((!isNaN(char) && char[0] == '0')) {
+                else if (!isNaN(char) && char[0] === '0') {
                     divRow += `<div class="bomb" data-playernumber="${char[1]}"></div>`;
                 }
             }
             divRow += '</div>';
-
-
             col_index++;
         }
         map.insertAdjacentHTML('beforeend', `<div class="row">
