@@ -44,7 +44,6 @@ symbols = {
 
 
 def step_player(player_state, player_next, character_list, character_name):
-    print(player_state)
     tile = my_map[player_next[0]][player_next[1]]
     valid_slots = ['E', 'C', 'S']
     current_character = get_current_player(character_list, character_name)
