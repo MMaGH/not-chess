@@ -1,5 +1,8 @@
-export const playerMove = async (state, next, bomb) => {
-    let dict = {'state': state, 'next': next, 'isBomb': bomb};
+export let canMove = true;
+
+export const playerMove = async (state, next) => {
+    canMove = false;
+    let dict = {'state': state, 'next': next};
     const options = {
         method: 'POST',
         body: JSON.stringify(dict),
@@ -7,7 +10,7 @@ export const playerMove = async (state, next, bomb) => {
             'Content-Type': 'application/json'
         }
     };
-    await fetch('/player-move', options);
+    fetch('/player-move', options)
 }
 
 export const getBomb = async (state, userId) => {
@@ -24,7 +27,10 @@ export const getBomb = async (state, userId) => {
 
 export const refreshMap = async (callback) => {
     getMap(callback);
-    setInterval(() => getMap(callback), 200);
+    setInterval(() => {
+        canMove = true;
+        getMap(callback)
+    }, 200);
 }
 
 function getMap(callback){
