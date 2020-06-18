@@ -130,6 +130,7 @@ def room_info(id):
         if room["id"] == id:
             current_room = room
             break
+    print(current_room)
     return current_room
 
 
