@@ -1,37 +1,157 @@
-.error-message {
-    color: red;
+body {
+    margin: 0px;
+    padding: 0;
+    background: url("/static/background/new_bombs.jpg") no-repeat 0;
+    background-position: bottom;
+    background-size: cover;
+    background-attachment: fixed;
+    width: 100%;
 }
 
-.room-row{
+h1{
+    font-size: 24px;
+    color: cornsilk;
+}
+
+.error-message {
+    color: darkred;
+}
+
+.room-row {
     border: 1px black solid;
 }
 
-.header {
-    margin-left: auto;
-    margin-right: auto;
-    width: auto;
-    text-align: center;
+.box-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: cornsilk;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
 }
 
-.header-elem {
-    display: inline-block;
-    font-size: 20px;
-    width: 200px;
+
+header {
     height: 50px;
-    border: saddlebrown 2px solid;
-    border-radius: 20px;
-    text-align: center;
-    background: burlywood;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1;
+    position: sticky;
+    left: 0px;
+    top: 0px;
 }
 
-a:link {
-    color: black;
+header h4 {
+    font-size: 22px;
+    color: cornsilk;
+    float: left;
+    margin: 15px;
 }
 
-a:visited {
-    color:black;
+
+nav {
+    float: right;
+    line-height: 50px;
+    color: cornsilk;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+a {
+    color: cornsilk;
+    text-decoration: none;
 }
 
 a:hover {
-    color: dimgrey;
+    color: cornsilk;
+    text-decoration: none;
+    font-weight: bold;
+
 }
+
+.header-elem a {
+    font-size: 20px;
+    color: cornsilk;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+a:link {
+    color: cornsilk;
+}
+
+a:visited {
+    color: cornsilk;
+}
+
+
+.box-content input {
+    outline: none;
+    background: none;
+    color: cornsilk;
+}
+
+.name-box h2 {
+    color: cornsilk;
+    font-size: 32px;
+    border-bottom: 5px solid darkred;
+    margin-bottom: 50px;
+    padding: 10px;
+    transform: translate(-50% -50%);
+    text-align: center;
+}
+
+.name-input {
+    border-bottom: 1px solid darkred;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    margin-bottom: 20px;
+    font-size: 22px;
+    width: 80%;
+}
+
+.name-button {
+    width: 100%;
+    border: 1px solid darkred;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    margin: 5px;
+    color: cornsilk;
+    font-size: 24px;
+}
+
+.room-list{
+    font-size: 22px;
+    text-align: center;
+}
+
+.room-list tr{
+    height: 50px;
+    margin: 10px;
+}
+
+.room-list th{
+    font-size: 24px;
+    margin: 10px;
+    padding: 10px;
+    width: auto;
+}
+
+.room-list td{
+    font-size: 20px;
+    margin: 10px;
+    padding: 10px;
+    width: auto;
+}
+
+#play-button{
+    color: black;
+}
+
+
