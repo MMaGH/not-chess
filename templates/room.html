@@ -24,7 +24,7 @@
         </table>
         <form action="/room/{{ room["id"] }}/start">
             <input name="button" id="button" value="button" hidden>
-            <button class="input-button" type="submit" ><a href>Play</a></button>
+            <button class="input-button" type="submit" ><a id="play-button" href>Play</a></button>
         </form>
     </div>
     <script src="{{ url_for("static", filename="js/room.js") }}" type="module" defer></script>
