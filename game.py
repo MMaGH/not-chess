@@ -5,25 +5,6 @@ import persistance as ps
 
 map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'map.csv')
 
-
-# my_map = [
-3,
-#     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-#     ['X', '11', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '21', 'X'],
-#     ['X', 'E', 'X', 'E', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'E', 'X', 'E', 'X'],
-#     ['X', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', 'X'],
-#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-#     ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
-#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-#     ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
-#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-#     ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
-#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-#     ['X', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', 'X'],
-#     ['X', 'E', 'X', 'E', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'E', 'X', 'E', 'X'],
-#     ['X', '31', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '41', 'X'],
-#     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-# ]
 original_map = [
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', '11', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '21', 'X'],
@@ -50,6 +31,7 @@ symbols = {
     'S': 'size_upgrade',
 }
 
+
 def initialize_my_map():
     ps.export_map(map_path, original_map)
 
@@ -65,53 +47,60 @@ def step_player(player_state, player_next, character_list, character_name):
             valid = False
             break
     if valid:
+        print(player_next)
         update_character(character_list, character_name, my_map[player_next[0]][player_next[1]])
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', '')
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', '')
         my_map[player_next[0]][player_next[1]] += ',' + current_character['user_id'] + player_next[2]
         for i in range(1, 5):
-            my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + str(i), 'E')
+            my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(
+                str(current_character['user_id']) + str(i), 'E')
         ps.export_map(map_path, my_map)
 
 
 def show_bomb(state, user_id, character_list, character_name):
     my_map = ps.get_map(map_path)
     current_character = get_current_player(character_list, character_name)
-    if ('0' not in my_map[state[0]][state[1]]) and (current_character['bomb_used'] < current_character['bomb_count']):
-        current_character['bomb_used'] += 1
+    if ('0' not in my_map[state[0]][state[1]]) and (int(current_character['bomb_used']) < int(current_character['bomb_count'])):
+        print("inif")
+        current_character['bomb_used'] = str(int(current_character["bomb_used"]) + 1)
         my_map[state[0]][state[1]] += ',0' + str(user_id)
+        print(my_map[state[0]][state[1]])
+        ps.export_map(map_path, my_map)
         bomb_animation(state, user_id, current_character)
-    ps.export_map(map_path, my_map)
 
 
 def bomb_animation(state, user_id, current_character):
-    my_map = ps.get_map(map_path)
     time.sleep(2)
+    my_map = ps.get_map(map_path)
     my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',0' + str(user_id)), (',M' + str(user_id)), 1)
-    explosion_placement(0, 1, current_character, state, user_id, 'R')
-    explosion_placement(0, -1, current_character, state, user_id, 'L')
-    explosion_placement(1, 0, current_character, state, user_id, 'D')
-    explosion_placement(-1, 0, current_character, state, user_id, 'U')
+    explosion_placement(0, 1, current_character, state, user_id, 'R', my_map)
+    explosion_placement(0, -1, current_character, state, user_id, 'L', my_map)
+    explosion_placement(1, 0, current_character, state, user_id, 'D', my_map)
+    explosion_placement(-1, 0, current_character, state, user_id, 'U', my_map)
+    ps.export_map(map_path, my_map)
     time.sleep(1)
-    current_character['bomb_used'] -= 1
+    current_character['bomb_used'] = str(int(current_character["bomb_used"]) - 1)
     my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',M' + str(user_id)), '', 1)
-    remove_explosion_placement(0, 1, current_character, state, user_id, 'R')
-    remove_explosion_placement(0, -1, current_character, state, user_id, 'L')
-    remove_explosion_placement(1, 0, current_character, state, user_id, 'D')
-    remove_explosion_placement(-1, 0, current_character, state, user_id, 'U')
+    remove_explosion_placement(0, 1, current_character, state, user_id, 'R', my_map)
+    remove_explosion_placement(0, -1, current_character, state, user_id, 'L', my_map)
+    remove_explosion_placement(1, 0, current_character, state, user_id, 'D', my_map)
+    remove_explosion_placement(-1, 0, current_character, state, user_id, 'U', my_map)
     ps.export_map(map_path, my_map)
 
 
-def explosion_placement(i, j, current_character, state, user_id, direction):
-    my_map = ps.get_map(map_path)
-    while current_character['bomb_size'] >= i >= -1 * current_character['bomb_size'] and current_character['bomb_size'] >= j >= -1 * current_character['bomb_size']:
+def explosion_placement(i, j, current_character, state, user_id, direction, my_map):
+    while int(current_character['bomb_size']) >= i >= -1 * int(current_character['bomb_size']) and int(
+            current_character[
+                'bomb_size']) >= j >= -1 * int(current_character['bomb_size']):
         target = my_map[state[0] + i][state[1] + j]
         if 'X' not in target:
             my_map[state[0] + i][state[1] + j] += ',' + direction + user_id
             if 'B' in target:
                 number = random.randint(1, 4)
                 if number == 1:
-                    my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace('B', random.choice(['C', 'S']))
+                    my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace('B', random.choice(
+                        ['C', 'S']))
                 else:
                     my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace('B', 'E')
                 break
@@ -125,14 +114,14 @@ def explosion_placement(i, j, current_character, state, user_id, direction):
             j -= 1
         elif 0 < j:
             j += 1
-        ps.export_map(map_path, my_map)
 
 
-def remove_explosion_placement(i, j, current_character, state, user_id, direction):
-    my_map = ps.get_map(map_path)
-    while current_character['bomb_size'] >= i >= -1 * current_character['bomb_size'] and current_character['bomb_size'] >= j >= -1 * current_character['bomb_size']:
+def remove_explosion_placement(i, j, current_character, state, user_id, direction, my_map):
+    while int(current_character['bomb_size']) >= i >= -1 * int(current_character['bomb_size']) and int(
+            current_character['bomb_size']) >= j >= -1 * int(current_character['bomb_size']):
         if 'X' not in my_map[state[0] + i][state[1] + j]:
-            my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace((',' + direction + str(user_id)), '', 1)
+            my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace(
+                (',' + direction + str(user_id)), '', 1)
         else:
             break
         if i < 0:
@@ -143,7 +132,6 @@ def remove_explosion_placement(i, j, current_character, state, user_id, directio
             j -= 1
         elif 0 < j:
             j += 1
-        ps.export_map(map_path, my_map)
 
 
 def create_character(nickname, user_id):
@@ -154,11 +142,10 @@ def create_character(nickname, user_id):
 
 def update_character(character_list, character_name, upgrade_type):
     current_character = get_current_player(character_list, character_name)
-    print(upgrade_type)
     if 'C' in upgrade_type:
-        current_character['bomb_count'] += 1
+        current_character['bomb_count'] = str(int(current_character["bomb_count"]) + 1)
     elif 'S' in upgrade_type:
-        current_character['bomb_size'] += 1
+        current_character['bomb_size'] = str(int(current_character["bomb_size"]) + 1)
     return None
 
 
