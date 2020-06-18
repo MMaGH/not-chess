@@ -91,13 +91,13 @@ def room(id):
 
 @app.route("/logout")
 def logout():
+    if session["nickname"] in current_user:
+        current_user.remove(session["nickname"])
     if "nickname" in session and "room_id" in session:
         remove_player_from_room(session["nickname"], session["room_id"])
-        current_user.remove(session["nickname"])
         session.pop("nickname")
         session.pop("room_id")
     elif "nickname" in session:
-        current_user.remove(session["nickname"])
         session.pop("nickname")
     return redirect("/list-rooms")
 
