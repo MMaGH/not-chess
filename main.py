@@ -155,7 +155,7 @@ def room_info(id):
 def room_start(id):
     rooms = ps.get_rooms(rooms_path)
     for room in rooms:
-        if room["id"] == id:
+        if room["id"] == str(id):
             room["game_state"] = "playing"
             ps.export_rooms(rooms_path, rooms)
             game.initialize_my_map()
