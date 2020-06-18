@@ -1,3 +1,14 @@
+body {
+    margin: 0px;
+    padding: 0;
+    background: url("/static/background/new_bombs.jpg") no-repeat 0;
+    background-position: bottom;
+    background-size: cover;
+    background-attachment: fixed;
+    width: 100%;
+}
+
+
 .map {
     position: fixed;
     background-image: url("/static/assets/floor.png");

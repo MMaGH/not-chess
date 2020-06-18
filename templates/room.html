@@ -1,29 +1,31 @@
 {% extends 'layout.html' %}
 {% block title %}{{ room.name }}{% endblock %}
 {% block main %}
-    <div class="room-info" data-id="{{ room.id }}"></div>
-    <h1>{{ room.title }}</h1>
-    <table>
-        <tr>
-            <td>Player 1</td>
-            <td class="player1-name">{{ room['1'] }}</td>
+    <div class="box-content">
+        <div class="room-info" data-id="{{ room.id }}"></div>
+        <h1>{{ room.title }}</h1>
+        <table class="room-list">
+            <tr>
+                <td>Player 1</td>
+                <td class="player1-name">{{ room['1'] }}</td>
+            </tr>
+            <tr>
+                <td>Player 2</td>
+                <td class="player2-name">{{ room["2"] }}</td>
+            </tr>
+            <tr>
+                <td>Player 3</td>
+                <td class="player3-name">{{ room["3"] }}</td>
+            </tr>
+            <tr>
+                <td>Player 4</td>
+                <td class="player4-name">{{ room["4"] }}</td>
         </tr>
-        <tr>
-            <td>Player 2</td>
-            <td class="player2-name">{{ room["2"] }}</td>
-        </tr>
-        <tr>
-            <td>Player 3</td>
-            <td class="player3-name">{{ room["3"] }}</td>
-        </tr>
-        <tr>
-            <td>Player 4</td>
-            <td class="player4-name">{{ room["4"] }}</td>
-    </tr>
-    </table>
-    <form action="/room/{{ room["id"] }}/start">
-        <input name="button" id="button" value="button" hidden>
-        <button type="submit" class="start-button"><a href>Play</a></button>
-    </form>
+        </table>
+        <form action="/room/{{ room["id"] }}/start">
+            <input name="button" id="button" value="button" hidden>
+            <button class="input-button" type="submit" ><a href>Play</a></button>
+        </form>
+    </div>
     <script src="{{ url_for("static", filename="js/room.js") }}" type="module" defer></script>
 {% endblock %}
