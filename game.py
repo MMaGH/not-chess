@@ -1,24 +1,29 @@
 import time
 import random
+import os
+import persistance as ps
 
-my_map = [
-    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-    ['X', '11', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '21', 'X'],
-    ['X', 'E', 'X', 'E', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'E', 'X', 'E', 'X'],
-    ['X', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', 'X'],
-    ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-    ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
-    ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-    ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
-    ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-    ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
-    ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
-    ['X', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', 'X'],
-    ['X', 'E', 'X', 'E', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'E', 'X', 'E', 'X'],
-    ['X', '31', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '41', 'X'],
-    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-]
+map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'map.csv')
 
+
+# my_map = [
+3,
+#     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
+#     ['X', '11', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '21', 'X'],
+#     ['X', 'E', 'X', 'E', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'E', 'X', 'E', 'X'],
+#     ['X', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', 'X'],
+#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
+#     ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
+#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
+#     ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
+#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
+#     ['X', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'X'],
+#     ['X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'B', 'X'],
+#     ['X', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', 'X'],
+#     ['X', 'E', 'X', 'E', 'X', 'B', 'X', 'B', 'X', 'B', 'X', 'E', 'X', 'E', 'X'],
+#     ['X', '31', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '41', 'X'],
+#     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+# ]
 original_map = [
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', '11', 'E', 'E', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'E', 'E', '21', 'X'],
@@ -45,8 +50,12 @@ symbols = {
     'S': 'size_upgrade',
 }
 
+def initialize_my_map():
+    ps.export_map(map_path, original_map)
+
 
 def step_player(player_state, player_next, character_list, character_name):
+    my_map = ps.get_map(map_path)
     tile_list = my_map[player_next[0]][player_next[1]].split(',')
     invalid_slots = ['B', 'X']
     current_character = get_current_player(character_list, character_name)
@@ -64,17 +73,22 @@ def step_player(player_state, player_next, character_list, character_name):
         my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '2', 'E')
         my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '3', 'E')
         my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '4', 'E')
+        ps.export_map(map_path, my_map)
+
 
 
 def show_bomb(state, user_id, character_list, character_name):
+    my_map = ps.get_map(map_path)
     current_character = get_current_player(character_list, character_name)
     if ('0' not in my_map[state[0]][state[1]]) and (current_character['bomb_used'] < current_character['bomb_count']):
         current_character['bomb_used'] += 1
         my_map[state[0]][state[1]] += ',0' + str(user_id)
         bomb_animation(state, user_id, current_character)
+    ps.export_map(map_path, my_map)
 
 
 def bomb_animation(state, user_id, current_character):
+    my_map = ps.get_map(map_path)
     time.sleep(2)
     my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',0' + str(user_id)), (',M' + str(user_id)), 1)
     explosion_placement(0, 1, current_character, state, user_id, 'R')
@@ -88,9 +102,11 @@ def bomb_animation(state, user_id, current_character):
     remove_explosion_placement(0, -1, current_character, state, user_id, 'L')
     remove_explosion_placement(1, 0, current_character, state, user_id, 'D')
     remove_explosion_placement(-1, 0, current_character, state, user_id, 'U')
+    ps.export_map(map_path, my_map)
 
 
 def explosion_placement(i, j, current_character, state, user_id, direction):
+    my_map = ps.get_map(map_path)
     while current_character['bomb_size'] >= i >= -1 * current_character['bomb_size'] and current_character['bomb_size'] >= j >= -1 * current_character['bomb_size']:
         target = my_map[state[0] + i][state[1] + j]
         if 'X' not in target:
@@ -112,9 +128,11 @@ def explosion_placement(i, j, current_character, state, user_id, direction):
             j -= 1
         elif 0 < j:
             j += 1
+        ps.export_map(map_path, my_map)
 
 
 def remove_explosion_placement(i, j, current_character, state, user_id, direction):
+    my_map = ps.get_map(map_path)
     while current_character['bomb_size'] >= i >= -1 * current_character['bomb_size'] and current_character['bomb_size'] >= j >= -1 * current_character['bomb_size']:
         if 'X' not in my_map[state[0] + i][state[1] + j]:
             my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace((',' + direction + str(user_id)), '', 1)
@@ -128,6 +146,7 @@ def remove_explosion_placement(i, j, current_character, state, user_id, directio
             j -= 1
         elif 0 < j:
             j += 1
+        ps.export_map(map_path, my_map)
 
 
 def create_character(nickname, user_id):
