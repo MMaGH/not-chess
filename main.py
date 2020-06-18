@@ -6,9 +6,10 @@ import os
 
 app = Flask(__name__)
 app.secret_key = '$2b$12$5MbzcQaISUKBu4MqGbZ25.G1pViRBZ5vwV.nTtF8LYXpMuYZ3BwUm'
-characters_stat = []
 rooms_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'rooms.csv')
 users_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'users.csv')
+map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'map.csv')
+characters_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'characters.csv')
 
 @app.route('/')
 def index():
@@ -71,6 +72,7 @@ def list_rooms():
 @app.route("/room/<id>", methods=["GET", "POST"])
 def room(id):
     rooms = ps.get_rooms(rooms_path)
+    characters_stat = ps.get_characters(characters_path)
     if "nickname" not in session:
         return redirect("/create-nickname")
     selected_room = {}
@@ -88,6 +90,7 @@ def room(id):
                 characters_stat.append(
                     game.create_character(session["nickname"], session["user_id"]))
                 ps.export_rooms(rooms_path, rooms)
+                ps.export_characters(characters_path, characters_stat)
                 return redirect(f"/room/{id}")
         else:
             return render_template("join_room.html", room=selected_room, message="Password is incorrect")
@@ -115,21 +118,25 @@ def logout():
 @app.route('/player-move', methods=['POST'])
 @json_response
 def player_move():
+    characters_stat = ps.get_characters(characters_path)
     my_dict = request.json
     game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
+    ps.export_characters(characters_path, characters_stat)
 
 
 @app.route('/player-place-bomb', methods=['POST'])
 @json_response
 def place_bomb():
+    characters_stat = ps.get_characters(characters_path)
     my_dict = request.json
     game.show_bomb(my_dict['bombState'], my_dict['userId'], characters_stat, session["nickname"])
+    ps.export_characters(characters_path, characters_stat)
 
 
 @app.route('/map')
 @json_response
 def map():
-    return game.my_map
+    return ps.get_map(map_path)
 
 
 @app.route("/room/<id>/info")
@@ -151,7 +158,17 @@ def room_start(id):
         if room["id"] == id:
             room["game_state"] = "playing"
             ps.export_rooms(rooms_path, rooms)
+            game.initialize_my_map()
             return redirect(f"/")
+
+
+@app.route("/reset-rooms")
+def reset_rooms():
+    rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"},
+             {'id': '2', 'name': 'test2', 'password': 'test2', '1': '', '2': '', '3': '', '4': '',
+              "game_state": "lobby"}]
+    ps.export_rooms(rooms_path, rooms)
+    return redirect("/list-rooms")
 
 
 def put_player_into_room(room, player):
