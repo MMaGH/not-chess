@@ -2,9 +2,22 @@
 {% block title %}Room list{% endblock %}
 {% block main %}
     <table class="room-list">
-    {% for room in rooms %}
         <tr>
+            <th>Room name</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Player 3</th>
+            <th>Player 4</th>
+            <th>Status</th>
+        </tr>
+    {% for room in rooms %}
+        <tr class="room-row">
             <td><a href="/room/{{ room.id }}">{{ room.name }}</a></td>
+            <td>{{ room["1"] }}</td>
+            <td>{{ room["2"] }}</td>
+            <td>{{ room["3"] }}</td>
+            <td>{{ room["4"] }}</td>
+            <td>{{ room["game_state"] }}</td>
         </tr>
     {% endfor %}
     </table>
