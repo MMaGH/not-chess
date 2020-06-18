@@ -48,9 +48,9 @@ def step_player(player_state, player_next, character_list, character_name):
             break
     if valid:
         update_character(character_list, character_name, my_map[player_next[0]][player_next[1]])
-        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', '')
-        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', '')
-        my_map[player_next[0]][player_next[1]] += ',' + current_character['user_id'] + player_next[2]
+        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', 'E')
+        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', 'E')
+        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('E', (current_character['user_id'] + player_next[2]))
         for i in range(1, 5):
             my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(
                 str(current_character['user_id']) + str(i), 'E')
@@ -93,6 +93,10 @@ def explosion_placement(i, j, current_character, state, user_id, direction, my_m
                 'bomb_size']) >= j >= -1 * int(current_character['bomb_size']):
         target = my_map[state[0] + i][state[1] + j]
         if 'X' not in target:
+            target_list = target.split(',')
+            for item in target_list:
+                if item[0] in ['1', '2', '3', '4']:
+                    my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace(item, 'E')
             my_map[state[0] + i][state[1] + j] += ',' + direction + user_id
             if 'B' in target:
                 number = random.randint(1, 4)
