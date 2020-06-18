@@ -18,7 +18,6 @@ def get_users(filename):
     users = []
     with open(filename) as file:
         for row in file:
-            print(row + "1")
             users.append(row[:-1])
     return users
 
