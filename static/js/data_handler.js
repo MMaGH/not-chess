@@ -7,8 +7,7 @@ export const playerMove = async (state, next, bomb) => {
             'Content-Type': 'application/json'
         }
     };
-    let response = await fetch('/player-move', options);
-    let data = await response.json();
+    await fetch('/player-move', options);
 }
 
 export const getBomb = async (state, userId) => {
@@ -20,8 +19,7 @@ export const getBomb = async (state, userId) => {
             'Content-Type': 'application/json'
         }
     };
-    let response = await fetch('/player-place-bomb', options);
-    let data = await response.json();
+    await fetch('/player-place-bomb', options);
 }
 
 export const refreshMap = async (callback) => {

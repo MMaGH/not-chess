@@ -43,7 +43,8 @@ def create_room():
                 password != "" and password[0] != " " and \
                 check_room_name_availability(name):
             next_id = str(int(rooms[-1]["id"]) + 1)
-            new_room = {'id': next_id, 'name': name, 'password': password, '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"}
+            new_room = {'id': next_id, 'name': name, 'password': password, '1': '', '2': '', '3': '', '4': '',
+                        "game_state": "lobby"}
             rooms.append(new_room)
             return redirect(f"/room/{next_id}")
         else:
@@ -106,7 +107,6 @@ def logout():
 def player_move():
     my_dict = request.json
     game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
-    return True
 
 
 @app.route('/player-place-bomb', methods=['POST'])
@@ -114,13 +114,13 @@ def player_move():
 def place_bomb():
     my_dict = request.json
     game.show_bomb(my_dict['bombState'], my_dict['userId'], characters_stat, session["nickname"])
-    return True
 
 
 @app.route('/map')
 @json_response
 def map():
     return game.my_map
+
 
 @app.route("/room/<id>/info")
 @json_response
@@ -131,6 +131,7 @@ def room_info(id):
             current_room = room
             break
     return current_room
+
 
 @app.route("/room/<id>/start")
 def room_start(id):
@@ -150,8 +151,6 @@ def put_player_into_room(room, player):
                     selected_room = room
                     return True
     return False
-
-
 
 
 def remove_player_from_room(player, room_id):
