@@ -120,7 +120,7 @@ def logout():
 def player_move():
     characters_stat = ps.get_characters(characters_path)
     my_dict = request.json
-    game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
+    game.step_player(my_dict['state'], my_dict['next'], characters_stat, session["nickname"])
     ps.export_characters(characters_path, characters_stat)
 
 
