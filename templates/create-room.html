@@ -1,14 +1,16 @@
 {% extends 'layout.html' %}
-{% block title %}Join Room{% endblock %}
+{% block title %}Create Room{% endblock %}
 {% block main %}
     <div class="box-content">
         <div class="name-box">
-            <form method="post" action="/room/{{ room.id }}">
-                <h2>{{ room.name }}</h2>
+            <form method="post" action="/create-room">
+                <h2>Create Private Room</h2>
                 <p class="error-message">{{ message }}</p>
+                <label for="name"></label><br>
+                <input class="name-input" name="name" placeholder="Room Name"><br>
                 <label for="password"></label><br>
                 <input class="name-input" type="password" id="password" name="password" placeholder="Password"><br>
-                <button class="name-button" type="submit">Join</button>
+                <button class="name-button" type="submit">Create Room</button>
             </form>
         </div>
     </div>
