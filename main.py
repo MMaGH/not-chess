@@ -102,7 +102,6 @@ def room(id):
 @app.route("/logout")
 def logout():
     current_user = ps.get_users(users_path)
-    print(current_user)
     if session["nickname"] in current_user:
         current_user.remove(session["nickname"])
         ps.export_users(users_path, current_user)

@@ -47,7 +47,6 @@ def step_player(player_state, player_next, character_list, character_name):
             valid = False
             break
     if valid:
-        print(player_next)
         update_character(character_list, character_name, my_map[player_next[0]][player_next[1]])
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', '')
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', '')
@@ -62,10 +61,8 @@ def show_bomb(state, user_id, character_list, character_name):
     my_map = ps.get_map(map_path)
     current_character = get_current_player(character_list, character_name)
     if ('0' not in my_map[state[0]][state[1]]) and (int(current_character['bomb_used']) < int(current_character['bomb_count'])):
-        print("inif")
         current_character['bomb_used'] = str(int(current_character["bomb_used"]) + 1)
         my_map[state[0]][state[1]] += ',0' + str(user_id)
-        print(my_map[state[0]][state[1]])
         ps.export_map(map_path, my_map)
         bomb_animation(state, user_id, current_character)
 
