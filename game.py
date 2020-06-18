@@ -80,6 +80,7 @@ def bomb_animation(state, user_id, current_character):
     explosion_placement(-1, 0, current_character, state, user_id, 'U', my_map)
     ps.export_map(map_path, my_map)
     time.sleep(1)
+    my_map = ps.get_map(map_path)
     current_character['bomb_used'] = str(int(current_character["bomb_used"]) - 1)
     my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',M' + str(user_id)), '', 1)
     remove_explosion_placement(0, 1, current_character, state, user_id, 'R', my_map)
