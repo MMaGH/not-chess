@@ -84,6 +84,7 @@ body {
     padding: 0px;
     width: 85px;
     height: 85px;
+    top: 0;
     left: 50%;
     transform: translate(-50%, -50%);
     float: left;
@@ -110,9 +111,11 @@ body {
 
 
 .fire {
+    position: absolute;
     padding: 0px;
     width: 65px;
     height: 65px;
+    top: 0;
     float: left;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;

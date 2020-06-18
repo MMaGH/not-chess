@@ -46,18 +46,24 @@ symbols = {
 }
 
 
-def step_player(player_state, player_next, bomb, character_list, character_name):
-    tile = my_map[player_next[0]][player_next[1]]
-    valid_slots = ['E', 'C', 'S']
+def step_player(player_state, player_next, character_list, character_name):
+    tile_list = my_map[player_next[0]][player_next[1]].split(',')
+    invalid_slots = ['B', 'X']
     current_character = get_current_player(character_list, character_name)
-    if tile in valid_slots:
-        update_character(character_list, character_name, tile)
-        if bomb:
-            my_map[player_next[0]][player_next[1]] = current_character['user_id'] + player_next[2]
-            my_map[player_state[0]][player_state[1]] = 'E,0' + current_character['user_id']
-        else:
-            my_map[player_next[0]][player_next[1]] = current_character['user_id'] + player_next[2]
-            my_map[player_state[0]][player_state[1]] = 'E'
+    valid = True
+    for tile in tile_list:
+        if tile in invalid_slots:
+            valid = False
+            break
+    if valid:
+        update_character(character_list, character_name, my_map[player_next[0]][player_next[1]])
+        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', '')
+        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', '')
+        my_map[player_next[0]][player_next[1]] += ',' + current_character['user_id'] + player_next[2]
+        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '1', 'E')
+        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '2', 'E')
+        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '3', 'E')
+        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '4', 'E')
 
 
 def show_bomb(state, user_id, character_list, character_name):
@@ -70,14 +76,14 @@ def show_bomb(state, user_id, character_list, character_name):
 
 def bomb_animation(state, user_id, current_character):
     time.sleep(2)
-    my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',0' + str(user_id)), (',M' + str(user_id)))
+    my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',0' + str(user_id)), (',M' + str(user_id)), 1)
     explosion_placement(0, 1, current_character, state, user_id, 'R')
     explosion_placement(0, -1, current_character, state, user_id, 'L')
     explosion_placement(1, 0, current_character, state, user_id, 'D')
     explosion_placement(-1, 0, current_character, state, user_id, 'U')
     time.sleep(1)
     current_character['bomb_used'] -= 1
-    my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',M' + str(user_id)), '')
+    my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',M' + str(user_id)), '', 1)
     remove_explosion_placement(0, 1, current_character, state, user_id, 'R')
     remove_explosion_placement(0, -1, current_character, state, user_id, 'L')
     remove_explosion_placement(1, 0, current_character, state, user_id, 'D')
@@ -110,7 +116,10 @@ def explosion_placement(i, j, current_character, state, user_id, direction):
 
 def remove_explosion_placement(i, j, current_character, state, user_id, direction):
     while current_character['bomb_size'] >= i >= -1 * current_character['bomb_size'] and current_character['bomb_size'] >= j >= -1 * current_character['bomb_size']:
-        my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace((',' + direction + str(user_id)), '')
+        if 'X' not in my_map[state[0] + i][state[1] + j]:
+            my_map[state[0] + i][state[1] + j] = my_map[state[0] + i][state[1] + j].replace((',' + direction + str(user_id)), '', 1)
+        else:
+            break
         if i < 0:
             i -= 1
         elif 0 < i:
@@ -129,9 +138,10 @@ def create_character(nickname, user_id):
 
 def update_character(character_list, character_name, upgrade_type):
     current_character = get_current_player(character_list, character_name)
-    if upgrade_type == 'C':
+    print(upgrade_type)
+    if 'C' in upgrade_type:
         current_character['bomb_count'] += 1
-    elif upgrade_type == 'S':
+    elif 'S' in upgrade_type:
         current_character['bomb_size'] += 1
     return None
 

@@ -24,7 +24,7 @@ export const getBomb = async (state, userId) => {
 
 export const refreshMap = async (callback) => {
     getMap(callback);
-    setInterval(() => getMap(callback), 500);
+    setInterval(() => getMap(callback), 200);
 }
 
 function getMap(callback){

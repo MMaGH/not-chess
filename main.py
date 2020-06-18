@@ -106,7 +106,7 @@ def logout():
 @json_response
 def player_move():
     my_dict = request.json
-    game.step_player(my_dict['state'], my_dict['next'], my_dict['isBomb'], characters_stat, session["nickname"])
+    game.step_player(my_dict['state'], my_dict['next'], characters_stat, session["nickname"])
 
 
 @app.route('/player-place-bomb', methods=['POST'])
