@@ -1,14 +1,14 @@
 from flask import Flask, render_template, url_for, request, jsonify, flash, redirect, session, make_response
 from util import json_response
 import game
+import persistance as ps
+import os
 
 app = Flask(__name__)
 app.secret_key = '$2b$12$5MbzcQaISUKBu4MqGbZ25.G1pViRBZ5vwV.nTtF8LYXpMuYZ3BwUm'
-current_user = []
 characters_stat = []
-rooms = [{'id': '1', 'name': 'test', 'password': 'test', '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"},
-         {'id': '2', 'name': 'test2', 'password': 'test2', '1': '', '2': '', '3': '', '4': '', "game_state": "lobby"}]
-
+rooms_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'rooms.csv')
+users_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'users.csv')
 
 @app.route('/')
 def index():
@@ -19,10 +19,13 @@ def index():
 
 @app.route('/create-nickname', methods=["GET", "POST"])
 def create_user():
+    current_user = ps.get_users(users_path)
     if request.method == "POST":
         nickname = request.form["nickname"]
         if nickname != "" and nickname[0] != " " and nickname not in current_user:
             session["nickname"] = nickname
+            current_user.append(nickname)
+            ps.export_users(users_path, current_user)
             return redirect("/list-rooms")
         else:
             return render_template("create-nickname.html", message="Nickname is taken or invalid!")
@@ -31,6 +34,7 @@ def create_user():
 
 @app.route("/create-room", methods=["GET", "POST"])
 def create_room():
+    rooms = ps.get_rooms(rooms_path)
     if "nickname" not in session:
         return redirect("/create-nickname")
     if "room_id" in session:
@@ -46,6 +50,7 @@ def create_room():
             new_room = {'id': next_id, 'name': name, 'password': password, '1': '', '2': '', '3': '', '4': '',
                         "game_state": "lobby"}
             rooms.append(new_room)
+            ps.export_rooms(rooms_path, rooms)
             return redirect(f"/room/{next_id}")
         else:
             return render_template("create-room.html", message="Invalid name or password")
@@ -54,6 +59,7 @@ def create_room():
 
 @app.route("/list-rooms")
 def list_rooms():
+    rooms = ps.get_rooms(rooms_path)
     if "nickname" not in session:
         return redirect("/create-nickname")
     if "room_id" in session:
@@ -64,6 +70,7 @@ def list_rooms():
 
 @app.route("/room/<id>", methods=["GET", "POST"])
 def room(id):
+    rooms = ps.get_rooms(rooms_path)
     if "nickname" not in session:
         return redirect("/create-nickname")
     selected_room = {}
@@ -78,9 +85,9 @@ def room(id):
         if password == selected_room["password"]:
             if put_player_into_room(selected_room, session["nickname"]):
                 session["room_id"] = id
-                current_user.append(session["nickname"])
                 characters_stat.append(
                     game.create_character(session["nickname"], session["user_id"]))
+                ps.export_rooms(rooms_path, rooms)
                 return redirect(f"/room/{id}")
         else:
             return render_template("join_room.html", room=selected_room, message="Password is incorrect")
@@ -91,8 +98,11 @@ def room(id):
 
 @app.route("/logout")
 def logout():
+    current_user = ps.get_users(users_path)
+    print(current_user)
     if session["nickname"] in current_user:
         current_user.remove(session["nickname"])
+        ps.export_users(users_path, current_user)
     if "nickname" in session and "room_id" in session:
         remove_player_from_room(session["nickname"], session["room_id"])
         session.pop("nickname")
@@ -125,24 +135,27 @@ def map():
 @app.route("/room/<id>/info")
 @json_response
 def room_info(id):
+    rooms = ps.get_rooms(rooms_path)
     current_room = {}
     for room in rooms:
         if room["id"] == id:
             current_room = room
             break
-    print(rooms)
     return current_room
 
 
 @app.route("/room/<id>/start")
 def room_start(id):
+    rooms = ps.get_rooms(rooms_path)
     for room in rooms:
         if room["id"] == id:
             room["game_state"] = "playing"
+            ps.export_rooms(rooms_path, rooms)
             return redirect(f"/")
 
 
 def put_player_into_room(room, player):
+    rooms = ps.get_rooms(rooms_path)
     for num in range(4):
         if room[f"{num + 1}"] == "":
             room[f"{num + 1}"] = player
@@ -150,21 +163,25 @@ def put_player_into_room(room, player):
             for selected_room in rooms:
                 if selected_room["id"] == room["id"]:
                     selected_room = room
+                    ps.export_rooms(rooms_path, rooms)
                     return True
     return False
 
 
 def remove_player_from_room(player, room_id):
+    rooms = ps.get_rooms(rooms_path)
     for selected_room in rooms:
         if selected_room["id"] == room_id:
             room = selected_room
             for num in range(4):
                 if room[f"{num + 1}"] == player:
                     room[f"{num + 1}"] = ""
+                    ps.export_rooms(rooms_path, rooms)
                     break
 
 
 def check_room_name_availability(name):
+    rooms = ps.get_rooms(rooms_path)
     for room in rooms:
         if room["name"] == name:
             return False
