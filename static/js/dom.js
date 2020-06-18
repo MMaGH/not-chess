@@ -1,4 +1,4 @@
-import {playerMove, refreshMap, getBomb} from "./data_handler.js";
+import {playerMove, refreshMap, getBomb, canMove} from "./data_handler.js";
 
 
 export function dom() {
@@ -9,22 +9,18 @@ export function dom() {
         let playerRowIndex = parseInt(playerNode.dataset.row);
         let playerColIndex = parseInt(playerNode.dataset.col);
         let playerState = [playerRowIndex, playerColIndex];
-        let bomb = false;
-        if (playerNode.parentNode.querySelector('.bomb')){
-            bomb = true;
-        }
 
         let playerKeyCode = e.keyCode;
         if (playerKeyCode === 0 || playerKeyCode === 32) {
             placeBomb(playerState, userId);
-        } else {
-            playerMovement(playerKeyCode, playerRowIndex, playerColIndex, playerState, bomb)
+        } else if (canMove) {
+            playerMovement(playerKeyCode, playerRowIndex, playerColIndex, playerState)
         }
     });
     refreshMap(showMap);
 }
 
-function playerMovement(playerKeyCode, playerRowIndex, playerColIndex, playerState, bomb) {
+function playerMovement(playerKeyCode, playerRowIndex, playerColIndex, playerState) {
     let playerNext = [];
     let acceptableInput = [37, 38, 39, 40];
     if (acceptableInput.includes(playerKeyCode)) {
@@ -42,7 +38,7 @@ function playerMovement(playerKeyCode, playerRowIndex, playerColIndex, playerSta
                 playerNext = [playerRowIndex + 1, playerColIndex, '3'];
                 break;
         }
-        playerMove(playerState, playerNext, bomb);
+        playerMove(playerState, playerNext);
     }
 }
 

@@ -69,12 +69,9 @@ def step_player(player_state, player_next, character_list, character_name):
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', '')
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', '')
         my_map[player_next[0]][player_next[1]] += ',' + current_character['user_id'] + player_next[2]
-        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '1', 'E')
-        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '2', 'E')
-        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '3', 'E')
-        my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + '4', 'E')
+        for i in range(1, 5):
+            my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(str(current_character['user_id']) + str(i), 'E')
         ps.export_map(map_path, my_map)
-
 
 
 def show_bomb(state, user_id, character_list, character_name):
