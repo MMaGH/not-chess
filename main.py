@@ -129,7 +129,6 @@ def place_bomb():
     characters_stat = ps.get_characters(characters_path)
     my_dict = request.json
     game.show_bomb(my_dict['bombState'], my_dict['userId'], characters_stat, session["nickname"])
-    ps.export_characters(characters_path, characters_stat)
 
 
 @app.route('/map')

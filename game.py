@@ -2,7 +2,9 @@ import time
 import random
 import os
 import persistance as ps
+import threading
 
+characters_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'characters.csv')
 map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'map.csv')
 
 original_map = [
@@ -50,7 +52,8 @@ def step_player(player_state, player_next, character_list, character_name):
         update_character(character_list, character_name, my_map[player_next[0]][player_next[1]])
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('C', 'E')
         my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('S', 'E')
-        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('E', (current_character['user_id'] + player_next[2]))
+        my_map[player_next[0]][player_next[1]] = my_map[player_next[0]][player_next[1]].replace('E', (
+                    current_character['user_id'] + player_next[2]))
         for i in range(1, 5):
             my_map[player_state[0]][player_state[1]] = my_map[player_state[0]][player_state[1]].replace(
                 str(current_character['user_id']) + str(i), 'E')
@@ -60,14 +63,19 @@ def step_player(player_state, player_next, character_list, character_name):
 def show_bomb(state, user_id, character_list, character_name):
     my_map = ps.get_map(map_path)
     current_character = get_current_player(character_list, character_name)
-    if ('0' not in my_map[state[0]][state[1]]) and (int(current_character['bomb_used']) < int(current_character['bomb_count'])):
-        current_character['bomb_used'] = str(int(current_character["bomb_used"]) + 1)
+    if ('0' not in my_map[state[0]][state[1]]) and (
+            int(current_character['bomb_used']) < int(current_character['bomb_count'])):
         my_map[state[0]][state[1]] += ',0' + str(user_id)
         ps.export_map(map_path, my_map)
-        bomb_animation(state, user_id, current_character)
+        th1 = threading.Thread(target=bomb_animation, args=[state, user_id, character_name])
+        th1.start()
 
 
-def bomb_animation(state, user_id, current_character):
+def bomb_animation(state, user_id, character_name):
+    character_list = ps.get_characters(characters_path)
+    current_character = get_current_player(character_list, character_name)
+    current_character['bomb_used'] = str(int(current_character["bomb_used"]) + 1)
+    ps.export_characters(characters_path, character_list)
     time.sleep(2)
     my_map = ps.get_map(map_path)
     my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',0' + str(user_id)), (',M' + str(user_id)), 1)
@@ -76,14 +84,21 @@ def bomb_animation(state, user_id, current_character):
     explosion_placement(1, 0, current_character, state, user_id, 'D', my_map)
     explosion_placement(-1, 0, current_character, state, user_id, 'U', my_map)
     ps.export_map(map_path, my_map)
+    bomb_delete_animation(state, user_id, character_name)
+
+
+def bomb_delete_animation(state, user_id, character_name):
     time.sleep(1)
+    character_list = ps.get_characters(characters_path)
+    current_character = get_current_player(character_list, character_name)
     my_map = ps.get_map(map_path)
-    current_character['bomb_used'] = str(int(current_character["bomb_used"]) - 1)
     my_map[state[0]][state[1]] = my_map[state[0]][state[1]].replace((',M' + str(user_id)), '', 1)
     remove_explosion_placement(0, 1, current_character, state, user_id, 'R', my_map)
     remove_explosion_placement(0, -1, current_character, state, user_id, 'L', my_map)
     remove_explosion_placement(1, 0, current_character, state, user_id, 'D', my_map)
     remove_explosion_placement(-1, 0, current_character, state, user_id, 'U', my_map)
+    current_character['bomb_used'] = str(int(current_character["bomb_used"]) - 1)
+    ps.export_characters(characters_path, character_list)
     ps.export_map(map_path, my_map)
 
 
